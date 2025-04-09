@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input {
+      width: 250px;
+      padding: 5px;
+      margin-top: 5px;
+    }
+    .cep-container {
+      display: flex;
+      align-items: center;
+    }
+    .cep-container input[type="text"] {
+      margin-right: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 5px 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Formulário</h2>
+  <form id="formulario">
+    <label for="matricula">Matrícula</label>
+    <input type="text" id="matricula" name="matricula">
+
+    <label for="nome">Nome</label>
+    <input type="text" id="nome" name="nome">
+
+    <label for="cep">CEP</label>
+    <div class="cep-container">
+      <input type="text" id="cep" name="cep">
+      <button type="button" onclick="buscarEndereco()">🔍</button>
+    </div>
+
+    <label for="endereco">Endereço</label>
+    <input type="text" id="endereco" name="endereco">
+
+    <button type="button" onclick="validarFormulario()">OK</button>
+  </form>
+
+  <script>
+    function buscarEndereco() {
+      const cep = document.getElementById('cep').value.replace(/\D/g, '');
+      if (cep.length !== 8) {
+        alert('CEP inválido');
+        return;
+      }
+
+      fetch("https://viacep.com.br/ws/${cep}/json/");
+        then(response => response.json())
+        .then(data => {
+          if (data.erro) {
+            alert("CEP não encontrado.");
+          } else {
+            document.getElementById('endereco').value = "${data.logradouro}, ${data.bairro}, ${data.localidade} - ${data.uf}";
+          }
+        })
+        .catch(error => alert("Erro ao buscar o endereço"));
+    }
+
+    function validarFormulario() {
+      const campos = ['matricula', 'nome', 'cep', 'endereco'];
+      for (const id of campos) {
+        const valor = document.getElementById(id).value.trim();
+        if (valor.length < 3) {
+          alert("O campo ${id} deve ter pelo menos 3 caracteres.");
+          return;
+        }
+      }
+      alert("Formulário enviado com sucesso!");
+    }
+  </script>
+
+</body>
+</html>
