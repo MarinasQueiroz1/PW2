@@ -1,0 +1,125 @@
+<html>
+<head>
+    <title>Pagina</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div id="teste1"></div>
+    <input type="button" onclick="location.href='adicionar.html'" value="Novo Veículo">
+    <div id="tabela_veiculos"></div>
+    
+    <div class="loader" id="loader" style="display: none;">
+        <h2>Carregando..</h2>
+        <img src="preload.gif" style="height:50px">
+        <p>Aguarde enquanto recebemos os dados de veículos...</p>
+    </div>
+</body>
+
+<script>
+    var lista = [];
+    var pg_atual = 1;
+    var qt_itens = 5;
+
+    // Função para obter os dados
+    async function pegaDados() {
+        showDialog();
+        const response = await fetch('https://mauricio.inf.br/p6/api/list/');
+        const names = await response.json();
+        lista = names.veiculos;
+        pg_atual = 1; // Reiniciar para a primeira página ao atualizar dados
+        gerarTabela();
+        hideDialog();
+    }
+
+    // Função para gerar a tabela
+    function gerarTabela() {
+        // Limpa a tabela
+        document.getElementById('tabela_veiculos').innerHTML = '';
+
+        // Calcula limites de índices
+        const startIdx = (pg_atual - 1) * qt_itens;
+        const endIdx = Math.min(startIdx + qt_itens, lista.length);
+
+        // Cria a tabela
+        var tabela = "<table style='width: 100%'>";
+        tabela += "<thead><tr><th style='text-align: center;'>Placas</th><th style='text-align: center;'>&nbsp;</th></tr></thead>";
+
+        for (let i = startIdx; i < endIdx; i++) {
+            tabela += "<tr>";
+            tabela += "<td style='border: 1px solid #ddd;'>" + lista[i].placa + "</td>";
+            tabela += "<td style='border: 1px solid #ddd; text-align: center;'><a href='#' onclick=\"apagar('" + lista[i].placa + "')\">x</a></td>";
+            tabela += "</tr>";
+        }
+        tabela += "</table>";
+
+        // Botões de navegação
+        const totalPaginas = Math.ceil(lista.length / qt_itens);
+
+        // Botão anterior
+        if (pg_atual > 1) {
+            tabela += "<input type='button' value='Anterior' onclick='antTab()'>";
+        } else {
+            tabela += "<input type='button' value='Anterior' disabled>";
+        }
+
+        // Botão próximo
+        if (pg_atual < totalPaginas) {
+            tabela += "<input type='button' value='Prox' onclick='proxTab()'>";
+        } else {
+            tabela += "<input type='button' value='Prox' disabled>";
+        }
+
+        // Atualizar a div
+        document.getElementById('tabela_veiculos').innerHTML = tabela;
+    }
+
+    function proxTab() {
+        const totalPaginas = Math.ceil(lista.length / qt_itens);
+        if (pg_atual < totalPaginas) {
+            pg_atual++;
+            gerarTabela();
+        }
+    }
+
+    function antTab() {
+        if (pg_atual > 1) {
+            pg_atual--;
+            gerarTabela();
+        }
+    }
+
+    // Função para excluir veículo
+    function exclui(placa) {
+        var ajax = new XMLHttpRequest();
+        var form_data = new FormData();
+        form_data.append("placa", placa);
+        ajax.open("POST", "https://mauricio.inf.br/p6/api/remove/", true);
+        ajax.send(form_data);
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4 && ajax.status == 200) {
+                pegaDados();
+            }
+        }
+    }
+
+    function apagar(placa) {
+        if (confirm("Deseja apagar o veiculo de placa " + placa + "?")) {
+            exclui(placa);
+            showDialog();
+        }
+    }
+
+    // Funções para controle do loader
+    function showDialog() {
+        document.getElementById('loader').style.display = 'block';
+    }
+
+    function hideDialog() {
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    // Inicializa
+    pegaDados();
+
+</script>
+</html>
