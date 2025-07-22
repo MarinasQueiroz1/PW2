@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal da Mari</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">Mari News</div> <!-- Nome personalizado -->
+    <nav class="nav">
+      <ul class="menu">
+        <li><a href="#">Início</a></li>
+        <li><a href="#">Últimas</a></li>
+        <li><a href="#">Quem Somos</a></li>
+        <li><a href="#">Fale Conosco</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">&#9776;</div>
+    </nav>
+  </header>
+
+  <section class="destaque">
+    <img src="https://picsum.photos/1200/400" alt="Imagem destaque">
+    <h1>Bem-vindo ao Mari News, sua fonte diária de informação!</h1>
+  </section>
+
+  <main class="container">
+    <section class="noticias">
+      <div class="card">
+        <img src="https://picsum.photos/300/200" alt="">
+        <h2>Novidade 1</h2>
+        <p>Confira os detalhes dessa novidade imperdível!</p>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/300/200" alt="">
+        <h2>Atualização 2</h2>
+        <p>Veja o que mudou recentemente no cenário atual.</p>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/300/200" alt="">
+        <h2>Destaque 3</h2>
+        <p>Entenda por que essa notícia está chamando atenção.</p>
+      </div>
+      <div class="card">
+        <img src="https://picsum.photos/300/200" alt="">
+        <h2>Curiosidade 4</h2>
+        <p>Descubra algo interessante que talvez você não sabia!</p>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <h3>Temas em Alta</h3>
+      <ul class="list">
+        <li>Política</li>
+        <li>Esportes</li>
+        <li>Tecnologia</li>
+        <li>Cultura Pop</li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <p>Email para contato: contato@seudominio.com</p>
+    <div class="social">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const menu = document.querySelector('.menu');
+    hamburger.onclick = () => {
+      menu.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>
